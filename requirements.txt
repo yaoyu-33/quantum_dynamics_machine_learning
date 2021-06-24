@@ -1,5 +1,7 @@
-tensorflow
-notebook
-jupyter
-matplotlib
-seaborn
+numpy>=1.18,<1.19
+tensorflow>=2.3,<2.4
+notebook>=6.1,<6.2
+jupyter>=1.0,<1.1
+matplotlib>3.3,<3.4
+seaborn>=0.11,<0.12
+

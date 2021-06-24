@@ -1,32 +1,61 @@
-# Emulating Quantum Dynamics via Curriculum Training
+# Emulating Quantum Dynamics with Neural Networks via Knowledge Distillation
 
-This repository contains the source code for the paper ---. This code can be used to replicate and illustrate the results of the paper.
+This repository contains the source code for the paper
+Yu Yao, Chao Cao, Stephan Haas, and Marcin Abram, 
+_Emulating Quantum Dynamics with Neural Networks via Knowledge Distillation_ (2021).
 
-(Here we will include brief introduction with some images)
+The purpose of this code is to illustrate our framework and to replicate the main results of our paper.
+
+## Introduction
+
+We introduce a novel framework for training machine learning-based emulators.
+It combines ideas of knowledge distillation and curriculum learning.
+The main goal is to construct a process in which the emulator can extract
+the basic rules governing the time evolution of a physical system.
+
+The main framework is illustrated below.
+
+![Framework Illustration](figures/framework.png "Framework Illustration")
+
+
+First, we simulate the physical system of our interest.
+Then, we construct individual training examples, and we build a training curriculum.
+The goal is to represent all the interesting phenomena that we wish to capture.
+For example, to describe the propagation of quantum packets, we must capture dispersion,
+scattering, tunneling, and quantum wave-interference.
+In the next step, we use our curriculum of simple examples to train our emulator.
+To test the generalization capability of our machine learning model,
+we measure whether the emulator can predict the evolution of more complex systems.
 
 ## Installation
 
-These instructions are for the Linux Operating System. 
+These instructions are for machines with the Linux Operating System.
+Installation on Windows or macOS should be similar, just make sure
+that the gcc compiler for C is installed in the system.
 
-Clone this Repository.
+**Clone this Repository.**
 
 ```shell
 git clone https://github.com/yaoyu-33/quantum_dynamics_machine_learning
 cd quantum_dynamics_machine_learning
 ```
-Create Virtual Environment and Install dependencies
+
+**Create Virtual Environment and Install dependencies**
 ```shell
 python -m virtualenv qwave
 source qwave/bin/activate
 pip install -r requirements.txt
 ```
 
-Install ffmpeg for rendering simulations
+**Install ffmpeg for rendering simulations**
 ```shell
 sudo apt update
 sudo apt install ffmpeg
 ```
-(For Windows, make sure the gcc compiler for C is installed in the system)
+
+## Demonstration
+
+To see a demonstration of our framework, check the Jupyter notebook in the _Demonstration_ folder.
 
 ### Data Preparation
 
@@ -40,11 +69,25 @@ Run the notebook ```model.ipnyb``` to define all the models and train them on th
 
 Run the notebook ```analyze.ipnyb``` to run and simulate tests on the custom test examples using the trained model.
 
-(Here we can add some more results and plots)
+## Results
 
+TBA
+
+## Discussion
+
+The main difference from the typical supervised learning setting is that the distributions
+of training and test examples are essentially different.
+The goal is to construct an informative curriculum of simple examples.
+Next, to extract the main rules describing the time-evolution of a physical system.
+Finally, to combine the acquired knowledge and use it to forecast the time-evolution of more complex systems,
+that could be hard to emulate in a standard way.
+
+Our framework can be relevant to researchers working in the fields of quantum chemistry, material science, and quantum optics.
+It can be used to model quantum devices and to simulate quantum information propagation.
+
+If you wish to learn more about our project, check our article.
 
 ## Citation
 
-
-## Acknowledgement
+TBA
 
