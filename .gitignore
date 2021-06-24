@@ -1,0 +1,5 @@
+venv/
+datasets/
+notebook/all_extra
+notebook/_pycache_
+notebook/.ipnyb_checkpoints/

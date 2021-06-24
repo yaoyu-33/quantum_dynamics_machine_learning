@@ -1,0 +1,5 @@
+tensorflow
+notebook
+jupyter
+matplotlib
+seaborn

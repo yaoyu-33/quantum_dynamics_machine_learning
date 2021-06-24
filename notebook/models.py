@@ -1,66 +1,7 @@
-# Import libraries
-import os
-import random
-import math
-import time
-import datetime
-import collections
+#Import Libraries
 import numpy as np
 import tensorflow as tf
-# import matplotlib.pyplot as plt
-# import matplotlib.gridspec as gridspec
-# import matplotlib.animation as animation
-
-from tensorflow import keras
 from tensorflow.keras import layers
-# from matplotlib.animation import FuncAnimation
-# from optimization import create_optimizer
-# from IPython.display import HTML
-# from utils import *
-
-class Config:
-    def __init__(self, **kwargs):
-        # read/write settings
-        self.qdml_tfrecords = "../datasets/demo/tfrecords/*"
-        self.model_name = "demo"
-        self.models_dir = "../models/"
-        self.log_name = None
-
-        # training settings
-        self.train_batch = 128
-        self.input_frames = 4
-        self.input_channels = 3  # 3 for full dataset
-        self.output_channels = 2
-        self.window_size = 23
-        self.dropout_rate = 0.
-        self.hidden_size = 69  # 69 for full dataset
-        self.num_train_steps = 200000
-
-        # optimization
-        self.learning_rate = 1e-3
-        self.lr_decay_power = 1.0
-        self.weight_decay_rate = 0.01
-        self.num_warmup_steps = 2000
-        self.opt_beta_1 = 0.9
-        self.opt_beta_2 = 0.999
-        self.end_lr = 1e-6
-        self.clip_norm = 1.0
-
-        # misc
-        self.num_threads = 4
-        self.seed = 711
-        self.logging_steps = 1000
-        self.save_ckpt_steps = 1000000
-
-        self.update(kwargs)        
-        self.model_dir = os.path.join(self.models_dir, self.model_name)
-        self.log_dir = os.path.join(self.model_dir, "logs")
-        self.ckpts = os.path.join(self.model_dir, "ckpts")
-    
-    def update(self, kwargs):
-        for k, v in kwargs.items():
-            if v is not None:
-                self.__dict__[k] = v
 
 
 class LinearModel(tf.keras.Model):
@@ -79,7 +20,6 @@ class LinearModel(tf.keras.Model):
 
         return x
 
-
 class DenseModel(tf.keras.Model):
     def __init__(self, config):
         super().__init__()
@@ -97,7 +37,6 @@ class DenseModel(tf.keras.Model):
         x = self.reshape(x)
         return x
 
-
 class CNNModel(tf.keras.Model):
     def __init__(self, config):
         super().__init__()
@@ -114,7 +53,6 @@ class CNNModel(tf.keras.Model):
         x = self.dense2(x)
         x = self.reshape(x)
         return x
-
 
 
 class RNNModel(tf.keras.Model):
