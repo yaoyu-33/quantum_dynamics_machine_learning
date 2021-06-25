@@ -1,5 +1,5 @@
 /*******************************************************************************
-File qd1.h is a header file for program qd1.c.
+File simulator.h is a header file for program simulator.c.
 *******************************************************************************/
 #define NX 1024   /* Number of mesh points */
 

@@ -23,7 +23,7 @@ Then, we construct individual training examples, and we build a training curricu
 The goal is to represent all the interesting phenomena that we wish to capture.
 For example, to describe the propagation of quantum packets, we must capture dispersion,
 scattering, tunneling, and quantum wave-interference.
-In the next step, we use our curriculum of simple examples to train our emulator.
+In the next step, we use our curriculum of simple examples to train the emulator.
 To test the generalization capability of our machine learning model,
 we measure whether the emulator can predict the evolution of more complex systems.
 
@@ -75,17 +75,17 @@ Run the notebook [part3_forecasting.ipynb](demonstration/part3_forecasting.ipynb
 
 ## Discussion
 
-The main difference from the typical supervised learning setting is that the distributions
-of training and test examples are essentially different.
-The goal is to construct an informative curriculum of simple examples.
-Next, to extract the main rules describing the time-evolution of a physical system.
-Finally, to combine the acquired knowledge and use it to forecast the time-evolution of more complex systems,
-that could be hard to emulate in a standard way.
+Our framework differs from a typical supervised learning in a few important aspects.
+First, the goal is not to learn patterns from data, rather to extract and synthetize
+knowledge about the studdied system from a physicly-informed simulator.
+Second, we construct a balanced curriculum of easy examples to promote the generalization of our emulator.
+Finally, the goal is to apply the acquired knowledge to complex cases that go beyond the scope of the training curriculum.
+Thus, in our case, the distributions of training and test examples are essentially different.
+The idea is to train the emulator on easy examples, and then use it to forecast cases
+that would be hard to emulate in a standard way.
 
 Our framework can be relevant to researchers working in the fields of quantum chemistry, material science, and quantum optics.
 It can be used to model quantum devices and to simulate quantum information propagation.
-
-If you wish to learn more about our project, check our article.
 
 ## Citation
 

@@ -3,13 +3,13 @@
  *
  * USAGE
  *
- * %cc -o qd1 qd1.c -lm
- * %qd1 < qd1.in (see qd1.h for the input-file format)
+ * %cc -o simulator.x simulator.c -lm
+ * %simulator.x < simulator.in (see simulator.h for the input-file format)
  * *******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "qd1.h"
+#include "simulator.h"
 
 
 int main(int argc, char *argv[]) {
