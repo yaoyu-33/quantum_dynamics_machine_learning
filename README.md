@@ -33,7 +33,7 @@ These instructions are for machines with the Linux Operating System.
 Installation on Windows or macOS should be similar, just make sure
 that the gcc compiler for C is installed in the system.
 
-**Clone this Repository.**
+**Clone this Repository**
 
 ```shell
 git clone https://github.com/yaoyu-33/quantum_dynamics_machine_learning
@@ -55,23 +55,23 @@ sudo apt install ffmpeg
 
 ## Demonstration
 
-To see a demonstration of our framework, check the Jupyter notebook in the _Demonstration_ folder.
+To see a demonstration of our framework, check the Jupyter notebook in the _demonstration_ folder.
 
-### Data Preparation
+**Data Preparation**
 
-Run the notebook ```data_preparation.ipnyb``` to generate the training data and save it to disk.
+Run the notebook [part1_data_preparation.ipynb](demonstration/part1_data_preparation.ipynb) to generate the training data. The training examples will be saved to a specified folder on your disk.
 
-### Training
+***Model Training***
 
-Run the notebook ```model.ipnyb``` to define all the models and train them on the generated data.
+Run the notebook [part2_model_training.ipynb](demonstration/part2_model_training.ipynb) to train the emulators.
 
-### Analysis
+***Forecasting***
 
-Run the notebook ```analyze.ipnyb``` to run and simulate tests on the custom test examples using the trained model.
+Run the notebook [part3_forecasting.ipynb](demonstration/part3_forecasting.ipynb) to forcast the time-evolution of the quantum system. This notebook also includes a series of tests to compare various model architectures.
 
 ## Results
 
-TBA
+![Results Illustration](figures/results.png "Results Illustration")
 
 ## Discussion
 
