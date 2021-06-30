@@ -122,7 +122,7 @@ def simulate(params):
     delta1 = time_stamp1 - start_time
     delta2 = time_stamp2 - time_stamp1
     delta3 = time_stamp3 - time_stamp2
-    print('*** simulation {:.3f}, read {:.3f}, windowing {:.3f}'.format(delta1, delta2, delta3))
+    print('*** simulation {:.3f}, reading {:.3f}, windowing {:.3f}'.format(delta1, delta2, delta3))
 
     return {'status': 'DONE', 'params': params, 'path': 'tmp/'}
 

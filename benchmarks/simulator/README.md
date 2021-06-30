@@ -12,7 +12,9 @@ Make sure that you have write access to a temp folder. By default we use the `/t
 
 Run
 
-    python scalability_benchmark.py -n 4 -p ''
+    time python scalability_benchmark.py -n 4 -p 'tmp/'
+
+Where the "-n" argument idicate how many threads are created and the "-p" argument indicate the path to the temporary folder.
 
 
 ## Results
