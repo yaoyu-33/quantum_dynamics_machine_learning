@@ -19,6 +19,10 @@ venv.bak/
 # Dataset
 datasets/
 
+# C extensions
+*.so
+*.x
+
 # Additional
 notebook/all_extra
-
+tmp/
