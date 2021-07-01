@@ -15,4 +15,4 @@ temp_ratio = 0.9
 spat_ratio = 0.1
 
 # The probability associated with the windows overlapped with the center potential barrier
-barrier_sample_weight = 50.
+b_weight = 50.0
