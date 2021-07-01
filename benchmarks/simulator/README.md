@@ -12,10 +12,11 @@ Make sure that you have write access to a temp folder. By default we use the `/t
 
 Run
 
-    time python scalability_benchmark.py -n 4 -p 'tmp/'
+    time python scalability_benchmark.py -p 4 -n 12
 
-Where the "-n" argument idicate how many threads are created and the "-p" argument indicate the path to the temporary folder.
+Where the "-p" argument idicates how many processes are created and the "-n" argument indicates how many groups of examples we create.
 
+You can change the parameters of the simulation in the `config.py` file.
 
 ## Results
 

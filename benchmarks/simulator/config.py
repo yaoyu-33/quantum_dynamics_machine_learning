@@ -16,3 +16,6 @@ spat_ratio = 0.1
 
 # The probability associated with the windows overlapped with the center potential barrier
 b_weight = 50.0
+
+# Specify a temp folder
+temp_folder = '/tmp/'

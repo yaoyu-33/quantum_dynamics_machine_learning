@@ -1,10 +1,11 @@
 """Load libraries and config variables."""
 import collections
 import numpy as np
+import os
 import subprocess
 import tensorflow as tf
 import time
-from config import num_input_frames, window_size
+from config import num_input_frames, window_size, temp_folder
 from config import temp_ratio, spat_ratio, b_weight
 
 
@@ -90,7 +91,7 @@ def example_generator(data):
 
         for j in spat_sample:
             # Create tf examples from a set of windows
-            r_range = i + num_input_frames + 1,
+            r_range = i + num_input_frames + 1
             im_range = j + window_size
             tf_example = tf.train.Example(
                 features=tf.train.Features(
@@ -124,12 +125,12 @@ def simulate(params):
     subprocess.call([
         './simulator.x',
         X0, S0, E0, BH, BW, '0.0',
-        'tmp/' + '_'.join([X0, S0, E0, BH, BW]) + '.txt'
+        temp_folder + '_'.join([X0, S0, E0, BH, BW]) + '.txt'
         ], stdout=subprocess.PIPE)
     time_stamp1 = time.time()
 
     # Read the file
-    data = retrieve_data('tmp/' + '_'.join([X0, S0, E0, BH, BW]) + '.txt')
+    data = retrieve_data(temp_folder + '_'.join([X0, S0, E0, BH, BW]) + '.txt')
     time_stamp2 = time.time()
 
     # Create windows
@@ -138,7 +139,7 @@ def simulate(params):
 
     # single_simulation = run_single_simulation(params)
     # training_examples = chose_training_examples(single_simulation, params)
-    # save('/tmp/...')  # You can save to the temp
+    # save('...')  # You can save to the temp
 
     delta1 = time_stamp1 - start_time
     delta2 = time_stamp2 - time_stamp1
@@ -146,7 +147,22 @@ def simulate(params):
     print('*** simulation {:.3f}, reading {:.3f}, windowing {:.3f}'
           .format(delta1, delta2, delta3))
 
+    # Clean
+    os.remove(temp_folder + '_'.join([X0, S0, E0, BH, BW]) + '.txt')
+
     return {'status': 'DONE',
             'params': params,
-            'path': 'tmp/',
+            'path': '...',
             'win_len': len(windows)}
+
+
+def func(x):
+    """Add 2.
+
+    Args:
+        x (float): a number
+
+    Returns:
+        float: a number
+    """
+    return x + 2
