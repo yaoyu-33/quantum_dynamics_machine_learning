@@ -1,8 +1,10 @@
 """Load libraries."""
 import argparse
+import logging
 import multiprocessing
 import numpy as np
 import simulator
+import sys
 
 
 if __name__ == '__main__':
@@ -11,7 +13,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', help='number of processes', type=int)
     parser.add_argument('-n', help='number of examples', type=int)
+    parser.add_argument(
+        '-v', '--verbose', help='verbosity level', type=int, default=0)
     args = parser.parse_args()
+
+    # Logging
+    logging_level = logging.INFO if args.verbose >= 1 else logging.CRITICAL
+    logging.basicConfig(stream=sys.stdout, level=logging_level)
 
     # Prepare a list of simulation parameters.
     parameters = [

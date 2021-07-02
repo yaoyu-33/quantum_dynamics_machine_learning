@@ -2,10 +2,11 @@
 import collections
 import numpy as np
 import os
+import logging
 import subprocess
 import tensorflow as tf
 import time
-from config import num_input_frames, window_size, temp_folder
+from config import num_input_frames, window_size, temp_folder, save_folder
 from config import temp_ratio, spat_ratio, b_weight
 
 
@@ -137,21 +138,23 @@ def simulate(params):
     windows = list(example_generator(data))
     time_stamp3 = time.time()
 
-    # single_simulation = run_single_simulation(params)
-    # training_examples = chose_training_examples(single_simulation, params)
-    # save('...')  # You can save to the temp
-
-    delta1 = time_stamp1 - start_time
-    delta2 = time_stamp2 - time_stamp1
-    delta3 = time_stamp3 - time_stamp2
-    print('*** simulation {:.3f}, reading {:.3f}, windowing {:.3f}'
-          .format(delta1, delta2, delta3))
-
     # Remove Intermediate File
     os.remove(filename)
 
     # Save generated windows
-    np.savez('tmp/windows.npz', windows)
+    save_path = os.path.join(
+        save_folder, 'windows' + '_'.join([X0, S0, E0, BH, BW]) + '.npz')
+    np.savez(save_path, windows)
+    time_stamp4 = time.time()
+
+    # Logs
+    delta1 = time_stamp1 - start_time
+    delta2 = time_stamp2 - time_stamp1
+    delta3 = time_stamp3 - time_stamp2
+    delta4 = time_stamp4 - time_stamp3
+    logging.info(
+        'simulation {:.3f}, reading {:.3f}, windowing {:.3f}, saving {:.3f}'
+        .format(delta1, delta2, delta3, delta4))
 
     return {'status': 'DONE',
             'params': params,

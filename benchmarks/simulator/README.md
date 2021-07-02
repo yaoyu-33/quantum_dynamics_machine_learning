@@ -12,7 +12,7 @@ Make sure that you have write access to a temp folder. By default we use the `/t
 
 Run
 
-    time python scalability_benchmark.py -p 4 -n 12
+    time python scalability_benchmark.py -p 4 -n 12 --verbose 1
 
 Where the "-p" argument idicates how many processes are created and the "-n" argument indicates how many groups of examples we create.
 

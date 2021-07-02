@@ -19,3 +19,4 @@ b_weight = 50.0
 
 # Specify a temp folder
 temp_folder = '/tmp/'
+save_folder = '/tmp/'
