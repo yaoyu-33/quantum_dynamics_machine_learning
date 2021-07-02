@@ -122,15 +122,16 @@ def simulate(params):
     start_time = time.time()
     X0, S0, E0 = params['X0'], params['S0'], params['E0']
     BH, BW = params['BH'], params['BW']
+    filename = temp_folder + '_'.join([X0, S0, E0, BH, BW]) + '.txt'
     subprocess.call([
         './simulator.x',
         X0, S0, E0, BH, BW, '0.0',
-        temp_folder + '_'.join([X0, S0, E0, BH, BW]) + '.txt'
+        filename
         ], stdout=subprocess.PIPE)
     time_stamp1 = time.time()
 
     # Read the file
-    data = retrieve_data(temp_folder + '_'.join([X0, S0, E0, BH, BW]) + '.txt')
+    data = retrieve_data(filename)
     time_stamp2 = time.time()
 
     # Create windows
@@ -147,8 +148,11 @@ def simulate(params):
     print('*** simulation {:.3f}, reading {:.3f}, windowing {:.3f}'
           .format(delta1, delta2, delta3))
 
-    # Clean
-    os.remove(temp_folder + '_'.join([X0, S0, E0, BH, BW]) + '.txt')
+    # Remove Intermediate File
+    os.remove(filename)
+
+    # Save generated windows
+    np.savez('tmp/windows.npz',windows)
 
     return {'status': 'DONE',
             'params': params,
