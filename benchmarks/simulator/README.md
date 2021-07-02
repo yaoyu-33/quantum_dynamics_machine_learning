@@ -44,7 +44,7 @@ Next, run
 
     PYTHONPATH=./ py.test tests/
 
-To change the coverage, install
+To check the coverage, install
 
     pip install coverage
 
