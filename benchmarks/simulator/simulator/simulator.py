@@ -152,7 +152,7 @@ def simulate(params):
     os.remove(filename)
 
     # Save generated windows
-    np.savez('tmp/windows.npz',windows)
+    np.savez('tmp/windows.npz', windows)
 
     return {'status': 'DONE',
             'params': params,
