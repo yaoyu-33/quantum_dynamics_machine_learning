@@ -102,7 +102,6 @@ def example_generator(data):
                 )
             )
             yield tf_example
-    return
 
 
 def simulate(params):
@@ -154,15 +153,3 @@ def simulate(params):
             'params': params,
             'path': '...',
             'win_len': len(windows)}
-
-
-def func(x):
-    """Add 2.
-
-    Args:
-        x (float): a number
-
-    Returns:
-        float: a number
-    """
-    return x + 2
