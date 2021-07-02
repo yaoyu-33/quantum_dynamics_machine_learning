@@ -27,3 +27,22 @@ We tested the scalability on a machine with 24 physical and 48 logical cores.
 The deviation from the theoretical (ideal) line can be easily understood. We have just 24 physical cores.
 The hyperthreading doesn't really help in cpu-heavy operations. Under 24 threads, that we have nearly-ideal scaling.
 We also show that the writing/reading operations (at least in the measured regime) are not creating any particular bottleneck.
+
+## Unit Tests
+
+Install
+
+    pip install pytest
+
+Next, run
+
+    PYTHONPATH=./ py.test tests/
+
+To change the coverage, install
+
+    pip install coverage
+
+Then, run
+
+    coverage run --source='.' -m unittest discover tests "*_test.py"
+    coverage report -m --omit=,"tests/*","config.py","*/__init__.py"
