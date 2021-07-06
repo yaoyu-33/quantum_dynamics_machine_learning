@@ -148,3 +148,4 @@ test.zip
 # Additional
 notebook/all_extra
 tmp/
+*.out
