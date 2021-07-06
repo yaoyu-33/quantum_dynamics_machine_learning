@@ -1,14 +1,15 @@
 """Download datasets."""
 import os
 import filelock
-import tensorflow.keras.datasets
+import numpy
 
 
-def get_train_data(data_path):
+def get_train_data(data_path, labels_path):
     """Get training dataset.
 
     Args:
         data_path (str): training datafile path
+        labels_path (str): training labels path
 
     Returns:
         None
@@ -18,7 +19,8 @@ def get_train_data(data_path):
     # TODO: Use the file lock (see the example below)
 
     with filelock.FileLock(os.path.expanduser("~/.emulator_data.lock")):
-        (x, y), (_, __) = tensorflow.keras.datasets.mnist.load_data()
+        x = numpy.load(data_path)
+        y = numpy.load(labels_path)
 
     # Normalize
     x = x.astype('float32')/255.0
@@ -26,11 +28,12 @@ def get_train_data(data_path):
     return x, y
 
 
-def get_validation_data(data_path):
+def get_validation_data(data_path, labels_path):
     """Get validation dataset.
 
     Args:
-        data_path (str): training datafile path
+        data_path (str): validation datafile path
+        labels_path (str): validation labels path
 
     Returns:
         None
@@ -40,7 +43,8 @@ def get_validation_data(data_path):
     # TODO: Use the file lock (see the example below)
 
     with filelock.FileLock(os.path.expanduser("~/.emulator_data.lock")):
-        (_, __), (x, y) = tensorflow.keras.datasets.mnist.load_data()
+        x = numpy.load(data_path)
+        y = numpy.load(labels_path)
 
     # Normalize
     x = x.astype('float32')/255.0

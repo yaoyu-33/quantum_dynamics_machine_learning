@@ -13,6 +13,10 @@ First, install all dependencies specify in the [requirements.txt](../../requirem
 
     pip instll -r ../../requirements.txt
 
+Then, download training and validation data.
+
+    python download_data.py
+
 To train the neural network-based emulator, run
 
     time PYTHONPATH=./ python train.py &> trainlog.log
@@ -68,4 +72,4 @@ To check the coverage, install
 Then, run
 
     coverage run --source='.' -m unittest discover tests "*_test.py"
-    coverage report -m --omit=,"tests/*","global_config.py","train.py","scalability_benchmark.py"
+    coverage report -m --omit=,"tests/*","global_config.py","train.py","scalability_benchmark.py","download_data.py"

@@ -19,9 +19,13 @@ class Emulator(ray.tune.Trainable):
     def setup(self, config):
         """Setup."""
         self.train_x, self.train_y = emulator.data.get_train_data(
-            data_path=global_config.training_data_path)
+            data_path=global_config.train_data_path,
+            labels_path=global_config.train_labels_path
+        )
         self.valid_x, self.valid_y = emulator.data.get_validation_data(
-            data_path=global_config.validation_data_path)
+            data_path=global_config.valid_data_path,
+            labels_path=global_config.valid_labels_path
+        )
         self.model = emulator.model.build(
             hidden=config['hidden'],
             dropout=config['dropout'],
@@ -77,7 +81,7 @@ if __name__ == "__main__":
         stop={
             "training_iteration": 12  # TODO: In the final run increase this
         },
-        num_samples=16,  # TODO: In the final run increase to 16 or 32
+        num_samples=16,  # TODO: In the final run you might increase it
         config={
             'hidden': ray.tune.randint(32, 512),
             'dropout': ray.tune.uniform(0, 1),
