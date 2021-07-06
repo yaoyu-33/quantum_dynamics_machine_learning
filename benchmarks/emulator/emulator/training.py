@@ -22,5 +22,5 @@ def train(model, x, y, epochs=10, batch_size=32):
         y,
         batch_size=batch_size,
         epochs=epochs,
-        verbose=0,
+        verbose=1,
     )

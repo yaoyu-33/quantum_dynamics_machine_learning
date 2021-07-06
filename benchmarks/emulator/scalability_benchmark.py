@@ -1,6 +1,5 @@
 """Scalability Benchmark."""
 import argparse
-import numpy
 import tensorflow
 
 import ray.tune
@@ -63,7 +62,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '-c', '--cpu_number', help='Number of CPUs.', type=int)
     parser.add_argument(
-        '-g', '--gpu_number', help='Number of GPUs.', type=int)
+        '-g', '--gpu_number', help='Number of GPUs.', type=int, default=0)
     args = parser.parse_args()
 
     ray.init(
@@ -85,9 +84,9 @@ if __name__ == "__main__":
         metric="mean_accuracy",
         mode="max",
         stop={
-            "training_iteration": 12  # TODO: In the final run increase this
+            "training_iteration": 6  # TODO: In the final run increase this
         },
-        num_samples=16,  # TODO: In the final run you might increase it
+        num_samples=4,  # TODO: In the final run you might increase it
         config={
             'hidden': ray.tune.randint(32, 512),
             'dropout': ray.tune.uniform(0, 1),
@@ -96,7 +95,7 @@ if __name__ == "__main__":
         },
         checkpoint_freq=2,
         checkpoint_at_end=True,
-        resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0}
+        resources_per_trial={'cpu': 2, 'gpu': 1 if args.gpu_number else 0}
     )
 
     print("Best hyperparameters found were: ", results.best_config)

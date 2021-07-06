@@ -19,8 +19,8 @@ def get_train_data(data_path, labels_path):
     # TODO: Use the file lock (see the example below)
 
     with filelock.FileLock(os.path.expanduser("~/.emulator_data.lock")):
-        x = numpy.load(data_path)
-        y = numpy.load(labels_path)
+        x = numpy.load(data_path)[:3200]
+        y = numpy.load(labels_path)[:3200]
 
     # Normalize
     x = x.astype('float32')/255.0

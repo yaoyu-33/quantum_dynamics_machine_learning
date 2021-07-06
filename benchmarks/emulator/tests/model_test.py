@@ -15,7 +15,7 @@ class EmulatorModelTest(unittest.TestCase):
         """Test the input shape."""
         model = emulator.model.build(
             hidden=12, dropout=0.0, lr=0.1, momentum=0.9)
-        self.assertEqual(list(model.input.shape), [None, 28, 28])
+        self.assertEqual(list(model.input.shape), [None, 32, 32, 3])
 
     def test_output_shape(self):
         """Test the output shape."""
