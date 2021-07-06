@@ -62,9 +62,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-c', '--cpu_number', help='Number of CPUs.', type=int)
+    parser.add_argument(
+        '-g', '--gpu_number', help='Number of GPUs.', type=int)
     args = parser.parse_args()
 
-    ray.init(num_cpus=args.cpu_number, log_to_driver=False)
+    ray.init(
+        num_cpus=args.cpu_number,
+        num_gpus=args.gpu_number,
+        log_to_driver=True
+    )
 
     scheduler = ray.tune.schedulers.AsyncHyperBandScheduler(
         time_attr="training_iteration",
@@ -90,6 +96,7 @@ if __name__ == "__main__":
         },
         checkpoint_freq=2,
         checkpoint_at_end=True,
+        resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0}
     )
 
     print("Best hyperparameters found were: ", results.best_config)
