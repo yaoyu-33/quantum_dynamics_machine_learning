@@ -22,7 +22,12 @@ class Emulator(ray.tune.Trainable):
             data_path=global_config.training_data_path)
         self.valid_x, self.valid_y = emulator.data.get_validation_data(
             data_path=global_config.validation_data_path)
-        self.model = emulator.model.build()
+        self.model = emulator.model.build(
+            hidden=config['hidden'],
+            dropout=config['dropout'],
+            lr=config['lr'],
+            momentum=config['momentum'],
+        )
 
     def step(self):
         """One step of training."""
@@ -35,12 +40,16 @@ class Emulator(ray.tune.Trainable):
         return {"mean_accuracy": score}
 
     def save_checkpoint(self, checkpoint_dir):
+        """Save the model's checkpoint."""
         file_path = checkpoint_dir + "/model"
+        print('***>>>', checkpoint_dir, file_path)
         self.model.save(file_path)
         return file_path
 
     def load_checkpoint(self, path):
+        """Load the checkpoint."""
         del self.model
+        print('***<<<', path)
         self.model = tensorflow.keras.models.load_model(path)
 
 
@@ -53,26 +62,30 @@ if __name__ == "__main__":
 
     ray.init(num_cpus=args.cpu_number, log_to_driver=False)
 
-    pbt = ray.tune.schedulers.PopulationBasedTraining(
-        perturbation_interval=2,
-        hyperparam_mutations={
-            "dropout": lambda: numpy.random.uniform(0, 1),
-            "lr": lambda: numpy.random.uniform(0.001, 0.1),
-            "hidden": lambda: numpy.random.randint(32, 256)
-        })
+    scheduler = ray.tune.schedulers.AsyncHyperBandScheduler(
+        time_attr="training_iteration",
+        max_t=100,
+        grace_period=5
+    )
 
     results = ray.tune.run(
         Emulator,
         name="pbt_emulator_tuning",
-        scheduler=pbt,
+        scheduler=scheduler,
         metric="mean_accuracy",
         mode="max",
         stop={
-            "training_iteration": 3  # TODO: In the final run increase this
+            "training_iteration": 12  # TODO: In the final run increase this
         },
-        num_samples=12,  # TODO: In the final run increase to 16 or 32
+        num_samples=16,  # TODO: In the final run increase to 16 or 32
         config={
-            "sth": 0.9
-        })
+            'hidden': ray.tune.randint(32, 512),
+            'dropout': ray.tune.uniform(0, 1),
+            'lr': ray.tune.loguniform(1e-5, 1e-1),
+            'momentum': ray.tune.uniform(0.5, 1),
+        },
+        checkpoint_freq=2,
+        checkpoint_at_end=True,
+    )
 
     print("Best hyperparameters found were: ", results.best_config)

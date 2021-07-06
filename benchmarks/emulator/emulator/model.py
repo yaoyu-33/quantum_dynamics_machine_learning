@@ -2,7 +2,7 @@
 import tensorflow
 
 
-def build(hidden=256, dropout=0.2, lr=0.05, momentum=0.9):
+def build(hidden, dropout, lr, momentum):
     """Build Neural Network.
 
     Args:

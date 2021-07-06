@@ -41,7 +41,9 @@ First, install ray,
 
 Then, run
 
-    time PYTHONPATH=./ python scalability_benchmark.py &> scalabilitylog.log 
+    time PYTHONPATH=./ python scalability_benchmark.py -c 4 &> scalabilitylog.log 
+
+Where we specified to use 4 CPUs (see `python scalability_benchmark.py -h` to see all the options).
 
 ## Results
 
@@ -66,4 +68,4 @@ To check the coverage, install
 Then, run
 
     coverage run --source='.' -m unittest discover tests "*_test.py"
-    coverage report -m --omit=,"tests/*","config.py","train.py"
+    coverage report -m --omit=,"tests/*","global_config.py","train.py","scalability_benchmark.py"

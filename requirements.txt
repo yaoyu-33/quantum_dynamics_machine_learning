@@ -5,3 +5,5 @@ jupyter>=1.0,<1.1
 matplotlib>3.3,<3.4
 seaborn>=0.11,<0.12
 mock>=4.0,<4.1
+ray==2.0.0.dev0
+
