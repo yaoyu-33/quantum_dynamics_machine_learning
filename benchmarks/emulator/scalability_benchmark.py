@@ -95,7 +95,7 @@ if __name__ == "__main__":
         },
         checkpoint_freq=2,
         checkpoint_at_end=True,
-        resources_per_trial={'cpu': 2, 'gpu': 1 if args.gpu_number else 0}
+        resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0}
     )
 
     print("Best hyperparameters found were: ", results.best_config)

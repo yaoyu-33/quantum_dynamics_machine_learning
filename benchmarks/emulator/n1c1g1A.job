@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu 
+#SBATCH --gres=gpu:k40:1
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=16GB
+#SBATCH --time=2:30:00
+#SBATCH --account=shaas_31
+
+module purge
+module load gcc/8.3.0
+module load python/3.7.6
+module load cuda/10.1.243
+
+source /home1/mjabram/env376bis/bin/activate
+time python scalability_benchmark.py -c 1 -g 1 &> logfile_n1c1g1Abis.log
+deactivate
+
