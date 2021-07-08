@@ -2,7 +2,6 @@
 import argparse
 import os.path
 
-import numpy
 import tensorflow
 
 import ray.tune
@@ -36,7 +35,9 @@ class Emulator(ray.tune.Trainable):
 
     def step(self):
         """One step of training."""
-        next(emulator.training.train(self.model, self.conf, self.train_dataset))
+        next(emulator.training.train(self.model,
+                                     self.conf,
+                                     self.train_dataset))
         score = emulator.evaluation.evaluate(
             self.model, self.conf, self.valid_dataset)
 

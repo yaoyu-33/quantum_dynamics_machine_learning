@@ -6,8 +6,7 @@ class Config:
     """Task config."""
 
     def __init__(self, datasets_path, **kwargs):
-        """ Configuration Settings for Training and Models"""
-
+        """Configuration Settings for Training and Models."""
         # Read/write Settings
         self.training_files = os.path.join(datasets_path, 'demo/tfrecords/*')
         self.model_name = "demo"
@@ -47,7 +46,13 @@ class Config:
         self.ckpts = os.path.join(self.model_dir, "ckpts")
 
     def update(self, kwargs):
-        # TODO: Update Docstrings
+        """Update variables.
+
+        Args:
+            kwargs: keyword arguments
+        Returns:
+            None
+        """
         for k, v in kwargs.items():
             if v is not None:
                 self.__dict__[k] = v

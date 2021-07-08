@@ -22,7 +22,7 @@ class RNNModel(tf.keras.Model):
             (config.window_size, config.output_channels))
 
     def call(self, inputs, training=False, mask=None):
-        """Calls the model on new inputs."""
+        """Call the model on new inputs."""
         x = self.flatten(inputs)
         x = self.dense1(x)
         output, final_state = self.gru(
