@@ -19,22 +19,22 @@ Unzip the data
     unzip datasets.zip
     unzip micro_dataset.zip
 
+If you use CUDA, specify the correct path for the XLA, e.g.,
+
+    export XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/lib/cuda/
+
 ## Single Training
 
 First, install all dependencies specify in the [requirements.txt](../../requirements.txt)
 
     pip instll -r ../../requirements.txt
 
-Then, download training and validation data.
-
-    python download_data.py -p /path/to/the/dataset/directory/
-
 To train the neural network-based emulator, run
 
     time PYTHONPATH=./ python train.py &> trainlog.log
 
 You can change parameters of the training
-by editing the `config.py` file.
+by editing the `global_config.py` file.
 
 ## Slurm Job Description
 

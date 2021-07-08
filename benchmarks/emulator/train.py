@@ -1,14 +1,19 @@
 """Train emulator."""
 import argparse
-import global_config
+import logging
+
 import emulator.data
 import emulator.model
 import emulator.training
 import emulator.evaluation
+import global_config
 
 
 if __name__ == '__main__':
     """Train and evaluate."""
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-d', '--datasets_path', type=str,
@@ -18,7 +23,10 @@ if __name__ == '__main__':
     if not args.datasets_path:
         raise Exception('You must specify datasets path.')
 
-    conf = global_config.Config(model_name="demo-gru")
+    conf = global_config.Config(
+        datasets_path=args.datasets_path,
+        model_name="demo-gru",
+    )
 
     # Training
     training_dataset = emulator.data.get_training_dataset(conf)

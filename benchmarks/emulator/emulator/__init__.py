@@ -1,1 +1,1 @@
-"""Emulator."""
+"""Initialization."""

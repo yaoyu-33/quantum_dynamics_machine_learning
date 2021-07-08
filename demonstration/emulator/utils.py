@@ -94,7 +94,7 @@ def get_dataset(config):
     """Creates dataset from a config object"""
     
     seed = config.seed
-    qdml_tfrecords = config.qdml_tfrecords
+    qdml_tfrecords = config.training_files
     batch_size = config.train_batch
     
     def _decode_record(record, name_to_features):

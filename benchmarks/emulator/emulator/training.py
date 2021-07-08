@@ -7,36 +7,15 @@ from emulator.optimization import create_optimizer
 import emulator.utils
 
 
-# def train(model, x, y, epochs=10, batch_size=32):
-#     """Train neural network.
-
-#     Args:
-#         model (tensorflow.keras.Model): model to be trained
-#         x (numpy.array): training data
-#         y (numpy.array): training labels
-#         epochs (int): number of epochs
-#         batch_size (int): batch size
-
-#     Returns:
-#         (tensorflow.keras.Model): trained model
-#     """
-
-
-
-#     # TODO: Update the training procedure.
-
-#     model.fit(
-#         x,
-#         y,
-#         batch_size=batch_size,
-#         epochs=epochs,
-#         verbose=0,
-#     )
-
-   
-def train(config, model, dataset):
+def train(config, model, dataset, save_checkpoints=False):
     """ Main training loop """
-    @tf.function #Uses XLA for faster training
+    # TODO: Update Docstrings
+    # TODO: Clean the code. Flake8 should give zero warnings
+    # TODO: Do not save the model (for the benchmark)
+    # TODO: Do not save any logs to disk
+    # TODO: instead of 'print' use logging.info or logging.debug
+
+    @tf.function  # Uses XLA for faster training
     def train_step(feature, target, model, optimizer):
         mse = tf.keras.losses.MeanSquaredError()
         with tf.GradientTape() as tape:
@@ -47,19 +26,14 @@ def train(config, model, dataset):
         optimizer.apply_gradients(zip(clipped_gradients, model.trainable_variables))
         return loss
 
-    #Seed for replication
-    tf.random.set_seed(config.seed)
-
+    # TODO: Remove
     #Logging during training
-    log_name = datetime.datetime.now().strftime("%Y%m%d-%H%M%S") if config.log_name is None else config.log_name
-    train_log_dir = config.log_dir + "/" + log_name
-    train_summary_writer = tf.summary.create_file_writer(train_log_dir)
-    f = open(train_log_dir + "/" + "config.txt", "w")
-    f.write(str(config.__dict__))
-    f.close()
-
-    # #Load dataset from config
-    # dataset = iter(get_dataset(config))
+    #log_name = datetime.datetime.now().strftime("%Y%m%d-%H%M%S") if config.log_name is None else config.log_name
+    #train_log_dir = config.log_dir + "/" + log_name
+    #train_summary_writer = tf.summary.create_file_writer(train_log_dir)
+    #f = open(train_log_dir + "/" + "config.txt", "w")
+    #f.write(str(config.__dict__))
+    #f.close()
 
     #Optimizer
     optimizer, lr_schedule = create_optimizer(
@@ -90,15 +64,20 @@ def train(config, model, dataset):
                 time.time() - logging_time,
                 emulator.utils.get_readable_time(time.time() - start_time),
                 emulator.utils.get_readable_time((time.time() - start_time) / step * (config.num_train_steps - step))), flush=True)
-            with train_summary_writer.as_default():
-                for k in metrics:
-                    tf.summary.scalar(k, metrics[k].result(), step=step)
-                    metrics[k].reset_states()
+            # TODO: Check if my modifications below are correct
+            #   I tried to disable the logs. I think tf.summary should
+            #   be removed, but the metrics reset is still important
+            for k in metrics:
+                metrics[k].reset_states()
             logging_time = time.time()
-        if step % config.save_ckpt_steps == 0 and step != config.num_train_steps:
-            model.save_weights(os.path.join(config.ckpts, "step_" + str(step)))
-            print("Model weights saved at ", os.path.join(config.ckpts, "step_" + str(step)))
 
-    model.save_weights(os.path.join(config.ckpts, "final_step"))
+        if save_checkpoints:
+            if step % config.save_ckpt_steps == 0 and step != config.num_train_steps:
+                model.save_weights(os.path.join(config.ckpts, "step_" + str(step)))
+                print("Model weights saved at ", os.path.join(config.ckpts, "step_" + str(step)))
+
     print("Model Trained!")
-    print("Model weights saved at ", os.path.join(config.ckpts, "final_step"))
+
+    if save_checkpoints:
+        model.save_weights(os.path.join(config.ckpts, "final_step"))
+        print("Model weights saved at ", os.path.join(config.ckpts, "final_step"))

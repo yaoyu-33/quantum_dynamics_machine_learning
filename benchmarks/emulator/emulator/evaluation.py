@@ -1,4 +1,5 @@
 """Evaluate neural network."""
+import logging
 import numpy as np
 import tensorflow as tf
 
@@ -21,11 +22,7 @@ def evaluate(model, config, validation_data):
     avg_correlations = []
 
     for i, data in enumerate(validation_data):
-        # TODO: Remove me
-        if i >= 2:
-            break
-        print('>>>', i)
-
+        logging.info('Evaluating {} dataset'.format(i))
         result = get_result(model, config,data)
         avg_correlations.append(get_avg_corr(config, data, result))
 
@@ -36,7 +33,7 @@ def evaluate(model, config, validation_data):
 def get_result(model, config, data, skip_frames=0, frames=400, normalization=False):
     """Calculates resulting simulation from model"""
     # TODO: Update Docstrings
-    # TODO: Refactor the code. Flake8 should give zero warnings
+    # TODO: Clean the code. Flake8 should give zero warnings
     features = tf.stack((tf.constant(data["psi_re"], dtype=tf.float32),
                          tf.constant(data["psi_im"], dtype=tf.float32),
                          tf.constant(data["pot"], dtype=tf.float32)), axis=-1)

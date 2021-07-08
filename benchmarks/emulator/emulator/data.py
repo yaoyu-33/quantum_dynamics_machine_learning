@@ -1,5 +1,4 @@
 """Download datasets."""
-import os
 import collections
 import numpy as np
 import tensorflow as tf
@@ -20,7 +19,7 @@ def get_training_dataset(config):
     # TODO: Why there is try/except? If you catch an exception
     #   the dataset will be undefined. And you will return it. This is not good.
     try:
-        dataset = iter(get_dataset(config))
+        dataset = iter(_create_tensoflow_dataset(config))
     except Exception as e: 
         print(e)
 
@@ -37,18 +36,21 @@ def get_validation_dataset(config):
     Returns:
         None
     """
+    # TODO: Update docstrings
     test_data = []
-    files = glob.glob("../../datasets/test/full_test_E0_0.0to9.0_BH_0.0to14.0/*.txt")
+    files = glob.glob(config.validation_files)
     for f in files:
-        test_data.append(retrieve_data(f))
+        test_data.append(_retrieve_validation_data(f))
 
     return test_data
 
 
-def get_dataset(config):
+def _create_tensoflow_dataset(config):
     """Creates dataset from a config object"""
+    # TODO: Update docstrings
+    # TODO: Clean the code. Flake8 should give zero warnings
     seed = config.seed
-    qdml_tfrecords = config.qdml_tfrecords
+    qdml_tfrecords = config.training_files
     batch_size = config.train_batch
 
     def _decode_record(record, name_to_features):
@@ -77,21 +79,25 @@ def get_dataset(config):
     return d
 
 
-def retrieve_data(file_name, pot_scalar=10.0):
+def _retrieve_validation_data(file_name, pot_scalar=10.0):
     """
     Input: Text file for raw simulation and potential scalar
     Output: Python DefaultDict containing the simulation data
 
     """
+    # TODO: Update docstrings
     data = collections.defaultdict(list)
     f = open(file_name, "r")
     for line in f:
         for key in ["timestamp", "params", "psi_re", "psi_im", "pot"]:
             if line.startswith(key):
-                data[key].append([float(x) for x in line.split()[1:]]
-                                 if key != "timestamp" else float(line.split()[1]))
+                data[key].append(
+                    [float(x) for x in line.split()[1:]]
+                    if key != "timestamp" else float(line.split()[1])
+                )
 
     for key in ["timestamp", "params", "psi_re", "psi_im", "pot"]:
         data[key] = np.array(data[key])
     data["pot"] /= pot_scalar
+
     return data
