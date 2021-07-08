@@ -31,7 +31,9 @@ if __name__ == '__main__':
     # Training
     training_dataset = emulator.data.get_training_dataset(conf)
     model = emulator.model.RNNModel(conf)
-    emulator.training.train(conf, model, training_dataset)
+
+    for step, loss in emulator.training.train(model, conf, training_dataset):
+        logger.debug('*** {} {}'.format(step, loss))
 
     # Evaluation
     validation_dataset = emulator.data.get_validation_dataset(conf)

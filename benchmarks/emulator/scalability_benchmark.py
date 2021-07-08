@@ -1,5 +1,7 @@
 """Scalability Benchmark."""
 import argparse
+import os.path
+
 import numpy
 import tensorflow
 
@@ -18,28 +20,25 @@ class Emulator(ray.tune.Trainable):
 
     def setup(self, config):
         """Setup."""
-        self.train_x, self.train_y = emulator.data.get_training_dataset(
-            data_path=global_config.train_data_path,
-            labels_path=global_config.train_labels_path
+        conf = global_config.Config(
+            datasets_path=config['datasets_path'],
+            model_name="demo-gru",
+            hidden_size=config['hidden'],
+            dropout_rate=config['dropout'],
+            learning_rate=config['lr'],
+            opt_beta_1=config['momentum'],
         )
-        self.valid_x, self.valid_y = emulator.data.get_validation_data(
-            data_path=global_config.valid_data_path,
-            labels_path=global_config.valid_labels_path
-        )
-        self.model = emulator.model.build(
-            hidden=config['hidden'],
-            dropout=config['dropout'],
-            lr=config['lr'],
-            momentum=config['momentum'],
-        )
+
+        self.train_dataset = emulator.data.get_training_dataset(conf)
+        self.valid_dataset = emulator.data.get_validation_dataset(conf)
+        self.model = emulator.model.RNNModel(conf)
+        self.conf = conf
 
     def step(self):
         """One step of training."""
-        emulator.training.train(
-            self.model, self.train_x, self.train_y, epochs=1)
-
+        next(emulator.training.train(self.model, self.conf, self.train_dataset))
         score = emulator.evaluation.evaluate(
-            self.model, self.valid_x, self.valid_y)
+            self.model, self.conf, self.valid_dataset)
 
         return {"mean_accuracy": score}
 
@@ -61,10 +60,24 @@ if __name__ == "__main__":
     """Run."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '-c', '--cpu_number', help='Number of CPUs.', type=int)
+        '-c', '--cpu_number', type=int,
+        help='Number of CPUs.')
+    parser.add_argument(
+        '-d', '--datasets_path', type=str,
+        help='Path to the datasets directory')
+    parser.add_argument(
+        '-g', '--gpu_number', type=int, default=0,
+        help='Number of GPUs.')
     args = parser.parse_args()
 
-    ray.init(num_cpus=args.cpu_number, log_to_driver=False)
+    if not args.datasets_path:
+        raise Exception('You must specify datasets path.')
+
+    ray.init(
+        num_cpus=args.cpu_number,
+        num_gpus=args.gpu_number,
+        log_to_driver=True
+    )
 
     scheduler = ray.tune.schedulers.AsyncHyperBandScheduler(
         time_attr="training_iteration",
@@ -79,10 +92,11 @@ if __name__ == "__main__":
         metric="mean_accuracy",
         mode="max",
         stop={
-            "training_iteration": 12  # TODO: In the final run increase this
+            "training_iteration": 2  # TODO: In the final run increase this
         },
-        num_samples=16,  # TODO: In the final run you might increase it
+        num_samples=8,  # TODO: In the final run you might increase it
         config={
+            'datasets_path': os.path.abspath(args.datasets_path),
             'hidden': ray.tune.randint(32, 512),
             'dropout': ray.tune.uniform(0, 1),
             'lr': ray.tune.loguniform(1e-5, 1e-1),
@@ -90,6 +104,7 @@ if __name__ == "__main__":
         },
         checkpoint_freq=2,
         checkpoint_at_end=True,
+        resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0},
     )
 
     print("Best hyperparameters found were: ", results.best_config)

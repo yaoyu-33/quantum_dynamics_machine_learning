@@ -22,7 +22,9 @@ def evaluate(model, config, validation_data):
     avg_correlations = []
 
     for i, data in enumerate(validation_data):
-        logging.info('Evaluating {} dataset'.format(i))
+        logging.info('Evaluating dataset {}'.format(i))
+        if i >= 1:  # TODO: Remove me!!!
+            break
         result = get_result(model, config,data)
         avg_correlations.append(get_avg_corr(config, data, result))
 

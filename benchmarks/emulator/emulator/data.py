@@ -1,5 +1,7 @@
 """Download datasets."""
 import collections
+import logging
+
 import numpy as np
 import tensorflow as tf
 import glob
@@ -20,7 +22,7 @@ def get_training_dataset(config):
     #   the dataset will be undefined. And you will return it. This is not good.
     try:
         dataset = iter(_create_tensoflow_dataset(config))
-    except Exception as e: 
+    except Exception as e:
         print(e)
 
     return dataset

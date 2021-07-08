@@ -1,19 +1,17 @@
 """Neural network training."""
 import tensorflow as tf
-import datetime
 import time
-import os
 from emulator.optimization import create_optimizer
 import emulator.utils
 
 
-def train(config, model, dataset, save_checkpoints=False):
+def train(model, config, dataset):
     """ Main training loop """
     # TODO: Update Docstrings
     # TODO: Clean the code. Flake8 should give zero warnings
     # TODO: Do not save the model (for the benchmark)
     # TODO: Do not save any logs to disk
-    # TODO: instead of 'print' use logging.info or logging.debug
+    # TODO: instead of 'print' use logging.debug or logging.info
 
     @tf.function  # Uses XLA for faster training
     def train_step(feature, target, model, optimizer):
@@ -57,13 +55,15 @@ def train(config, model, dataset, save_checkpoints=False):
         loss = train_step(feature, target, model, optimizer)
         metrics["train_loss"].update_state(loss)
         step += 1
-        if step % config.logging_steps == 0:
+        if step % config.hyper_step_size == 0:
             print("Step: {:6d}, Loss: {:.8f}, Time per logging: {:.2f}s, Elapsed: {:}, ETA: {:}".format(
                 step,
                 metrics["train_loss"].result(),
                 time.time() - logging_time,
                 emulator.utils.get_readable_time(time.time() - start_time),
                 emulator.utils.get_readable_time((time.time() - start_time) / step * (config.num_train_steps - step))), flush=True)
+            yield step, float(metrics["train_loss"].result())
+
             # TODO: Check if my modifications below are correct
             #   I tried to disable the logs. I think tf.summary should
             #   be removed, but the metrics reset is still important
@@ -71,13 +71,5 @@ def train(config, model, dataset, save_checkpoints=False):
                 metrics[k].reset_states()
             logging_time = time.time()
 
-        if save_checkpoints:
-            if step % config.save_ckpt_steps == 0 and step != config.num_train_steps:
-                model.save_weights(os.path.join(config.ckpts, "step_" + str(step)))
-                print("Model weights saved at ", os.path.join(config.ckpts, "step_" + str(step)))
-
-    print("Model Trained!")
-
-    if save_checkpoints:
-        model.save_weights(os.path.join(config.ckpts, "final_step"))
-        print("Model weights saved at ", os.path.join(config.ckpts, "final_step"))
+    print("Model Fully Trained!")
+    yield step, float(metrics["train_loss"].result())

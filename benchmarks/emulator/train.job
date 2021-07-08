@@ -15,4 +15,4 @@ module load cuda/10.1.243
 module load python/3.7.6
 
 source /path/to/your/virtual/environment/bin/activate
-time PYTHONPATH=./ python train.py &> trainlog.log
+time PYTHONPATH=./ python train.py --datasets_path=../../datasets &> logtr.log
