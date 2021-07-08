@@ -1,12 +1,12 @@
 """Download datasets."""
 import os
+import collections
 import numpy as np
 import tensorflow as tf
 import glob
-import emulator.utils
 
 
-def get_train_data(config):
+def get_training_dataset(config):
     """Get training dataset.
 
     Args:
@@ -16,15 +16,18 @@ def get_train_data(config):
     Returns:
         None
     """
+    # TODO: Update docstrings
+    # TODO: Why there is try/except? If you catch an exception
+    #   the dataset will be undefined. And you will return it. This is not good.
     try:
-        dataset=iter(emulator.utils.get_dataset(config))
+        dataset = iter(get_dataset(config))
     except Exception as e: 
         print(e)
 
     return dataset
 
 
-def get_test_data(config):
+def get_validation_dataset(config):
     """Get validation dataset.
 
     Args:
@@ -37,18 +40,58 @@ def get_test_data(config):
     test_data = []
     files = glob.glob("../../datasets/test/full_test_E0_0.0to9.0_BH_0.0to14.0/*.txt")
     for f in files:
-        test_data.append(emulator.utils.retrieve_data(f))
-
-
-    # # TODO: Load the emulator training data (e.g., from a file)
-    # # TODO: Return an exception if you can not find the file
-    # # TODO: Use the file lock (see the example below)
-
-    # with filelock.FileLock(os.path.expanduser("~/.emulator_data.lock")):
-    #     x = numpy.load(data_path)
-    #     y = numpy.load(labels_path)
-
-    # # Normalize
-    # x = x.astype('float32')/255.0
+        test_data.append(retrieve_data(f))
 
     return test_data
+
+
+def get_dataset(config):
+    """Creates dataset from a config object"""
+    seed = config.seed
+    qdml_tfrecords = config.qdml_tfrecords
+    batch_size = config.train_batch
+
+    def _decode_record(record, name_to_features):
+        """Decodes a record to a TensorFlow example and returns a training window with its label"""
+        example = tf.io.parse_single_example(record, name_to_features)
+        example = tf.reshape(example["feature"], (config.input_frames + 1, config.window_size, 3))
+        return example[:-1, :, :config.input_channels], example[-1, :, :config.output_channels]
+
+    name_to_features = {
+        "feature": tf.io.FixedLenFeature([np.product((config.input_frames + 1, config.window_size, 3))], tf.float32),
+    }
+
+    # Read all file paths
+    input_files = tf.io.gfile.glob(qdml_tfrecords)
+
+    # Create and Process Dataset
+    d = tf.data.Dataset.from_tensor_slices(tf.constant(input_files))
+    d = d.repeat()
+    d = d.shuffle(buffer_size=len(input_files), seed=seed, reshuffle_each_iteration=True)
+    d = d.interleave(tf.data.TFRecordDataset, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    d = d.shuffle(buffer_size=5000, seed=seed, reshuffle_each_iteration=True)
+    d = d.map(lambda record: _decode_record(record, name_to_features), num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    d = d.batch(batch_size)
+
+    # Return dataset with batches of windows and labels
+    return d
+
+
+def retrieve_data(file_name, pot_scalar=10.0):
+    """
+    Input: Text file for raw simulation and potential scalar
+    Output: Python DefaultDict containing the simulation data
+
+    """
+    data = collections.defaultdict(list)
+    f = open(file_name, "r")
+    for line in f:
+        for key in ["timestamp", "params", "psi_re", "psi_im", "pot"]:
+            if line.startswith(key):
+                data[key].append([float(x) for x in line.split()[1:]]
+                                 if key != "timestamp" else float(line.split()[1]))
+
+    for key in ["timestamp", "params", "psi_re", "psi_im", "pot"]:
+        data[key] = np.array(data[key])
+    data["pot"] /= pot_scalar
+    return data

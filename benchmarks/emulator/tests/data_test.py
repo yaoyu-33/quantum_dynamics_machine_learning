@@ -42,7 +42,7 @@ class EmulatorDataTest(unittest.TestCase):
     @mock.patch('numpy.load', mock.Mock(side_effect=return_file))
     def test_training_data(self):
         """Read the training data."""
-        x, y = emulator.data.get_train_data(
+        x, y = emulator.data.get_training_dataset(
             data_path='train_data',
             labels_path='train_labels'
         )

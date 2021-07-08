@@ -1,11 +1,23 @@
 # Emulator Benchmarks
 
-## Preparation
+## Training Data
+
+To get the data, install `gdown`
+
+    pip install gdown
 
 Download the training and test data
 
-    wget ...  # TODO: specify the right path
-    wget ...  # TODO: specify the right path
+    gdown https://drive.google.com/uc?id=14IDUDslmuWx2ZkP1nC0RUdue5EqGet1W
+
+Your md5sum should be
+
+    4e8d110dec4fa3b84bc5efb743f1e802  datasets.zip
+
+Unzip the data
+
+    unzip datasets.zip
+    unzip micro_dataset.zip
 
 ## Single Training
 
@@ -15,7 +27,7 @@ First, install all dependencies specify in the [requirements.txt](../../requirem
 
 Then, download training and validation data.
 
-    python download_data.py
+    python download_data.py -p /path/to/the/dataset/directory/
 
 To train the neural network-based emulator, run
 
@@ -24,7 +36,7 @@ To train the neural network-based emulator, run
 You can change parameters of the training
 by editing the `config.py` file.
 
-## Slurm
+## Slurm Job Description
 
 The slurm job description is in the `train.job` file.
 

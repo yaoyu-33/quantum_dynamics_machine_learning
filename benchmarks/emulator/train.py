@@ -1,49 +1,32 @@
 """Train emulator."""
+import argparse
 import global_config
 import emulator.data
 import emulator.model
 import emulator.training
 import emulator.evaluation
-import emulator.utils
+
 
 if __name__ == '__main__':
     """Train and evaluate."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-d', '--datasets_path', type=str,
+        help='Path to the datasets directory')
+    args = parser.parse_args()
 
-    conf = emulator.utils.Config(model_name="demo-gru")
+    if not args.datasets_path:
+        raise Exception('You must specify datasets path.')
 
-    dataset = emulator.data.get_train_data(conf)
+    conf = global_config.Config(model_name="demo-gru")
 
-    # training_data, training_labels = emulator.data.get_train_data(
-    #     data_path=global_config.train_data_path,
-    #     labels_path=global_config.train_labels_path
-    # )
+    # Training
+    training_dataset = emulator.data.get_training_dataset(conf)
+    model = emulator.model.RNNModel(conf)
+    emulator.training.train(conf, model, training_dataset)
 
-    model = emulator.model.RNNModel(conf) #Creating Model
+    # Evaluation
+    validation_dataset = emulator.data.get_validation_dataset(conf)
+    score = emulator.evaluation.evaluate(model, conf, validation_dataset)
 
-    # # Build and train the model
-    # model = emulator.model.build(
-    #     hidden=128,
-    #     dropout=0.2,
-    #     lr=0.01,
-    #     momentum=0.9
-    # )
-
-    emulator.training.train(
-        conf,
-        model,
-        dataset
-    )
-
-    # Evaluate the model
-    # valid_data, valid_labels = emulator.data.get_train_data(
-    #     data_path=global_config.valid_data_path,
-    #     labels_path=global_config.valid_labels_path
-    # )
-
-    test_data = emulator.data.get_test_data(conf)
-    score = emulator.evaluation.evaluate(model, conf, test_data)
-
-    # TODO: Save the final model
-
-    # Print the score
     print('The avg correlation for all test files is: {}'.format(score))

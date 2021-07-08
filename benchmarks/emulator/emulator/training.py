@@ -4,6 +4,7 @@ import datetime
 import time
 import os
 from emulator.optimization import create_optimizer
+import emulator.utils
 
 
 # def train(model, x, y, epochs=10, batch_size=32):
@@ -87,8 +88,8 @@ def train(config, model, dataset):
                 step,
                 metrics["train_loss"].result(),
                 time.time() - logging_time,
-                get_readable_time(time.time() - start_time),
-                get_readable_time((time.time() - start_time) / step * (config.num_train_steps - step))), flush=True)
+                emulator.utils.get_readable_time(time.time() - start_time),
+                emulator.utils.get_readable_time((time.time() - start_time) / step * (config.num_train_steps - step))), flush=True)
             with train_summary_writer.as_default():
                 for k in metrics:
                     tf.summary.scalar(k, metrics[k].result(), step=step)

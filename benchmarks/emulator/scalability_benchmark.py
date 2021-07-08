@@ -18,7 +18,7 @@ class Emulator(ray.tune.Trainable):
 
     def setup(self, config):
         """Setup."""
-        self.train_x, self.train_y = emulator.data.get_train_data(
+        self.train_x, self.train_y = emulator.data.get_training_dataset(
             data_path=global_config.train_data_path,
             labels_path=global_config.train_labels_path
         )
