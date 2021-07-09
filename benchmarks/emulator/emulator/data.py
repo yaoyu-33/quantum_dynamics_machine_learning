@@ -1,5 +1,6 @@
 """Download datasets."""
 import collections
+import logging
 
 import numpy as np
 import tensorflow as tf
@@ -18,6 +19,8 @@ def get_training_dataset(config):
     try:
         dataset = iter(_create_tensorflow_dataset(config))
     except Exception:
+        logging.error('*** Path: {}'.format(config.training_files))
+        logging.error('*** Path: {}'.format(config.validation_files))
         raise Exception('Dataset path is incorrect!')
 
     return dataset

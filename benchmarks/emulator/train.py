@@ -1,5 +1,6 @@
 """Train emulator."""
 import argparse
+import os
 import logging
 
 import emulator.data
@@ -24,7 +25,8 @@ if __name__ == '__main__':
         raise Exception('You must specify datasets path.')
 
     conf = global_config.Config(
-        datasets_path=args.datasets_path,
+        datasets_path=os.path.realpath(
+                os.path.expanduser(args.datasets_path)),
         model_name="demo-gru",
     )
 

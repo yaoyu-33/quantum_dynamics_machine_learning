@@ -13,5 +13,5 @@ module load python/3.7.6
 module load cuda/10.1.243
 
 source /path/to/your/virtual/environment/bin/activate
-time python scalability_benchmark.py -c 8 -g 0 --datasets_path=~/data/micro_datasets/ &> logfile_n1c8g0.log
+time python scalability_benchmark.py -c 8 -g 0 --datasets_path=~/micro_datasets/datasets/ &> logfile_n1c8g0.log
 deactivate

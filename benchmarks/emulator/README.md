@@ -17,7 +17,7 @@ Your md5sum should be
 
 Unzip the data
 
-    unzip micro_dataset.zip
+    unzip micro_datasets.zip
 
 If you use CUDA, specify the correct path for the XLA, e.g.,
 
@@ -31,7 +31,7 @@ First, install all dependencies specify in the [requirements.txt](../../requirem
 
 To train the neural network-based emulator, run
 
-    time PYTHONPATH=./ python train.py --datasets_path=~/micro_dataset/datasets/
+    time PYTHONPATH=./ python train.py --datasets_path=~/micro_datasets/datasets/
 
 You can change parameters of the training
 by editing the `global_config.py` file.
@@ -57,15 +57,17 @@ First, install ray,
 
 Then, run
 
-    time PYTHONPATH=./ python scalability_benchmark.py -c 4 --datasets_path=~/micro_dataset/datasets/
+    time PYTHONPATH=./ python scalability_benchmark.py -c 4 --datasets_path=~/micro_datasets/datasets/
 
 Where we specified to use 4 CPUs (see `python scalability_benchmark.py -h` to see all the options).
 
 ## Results
 
-TBA
+We tested the scalability on the USC Discovery cluster running on 
 
-...
+![Emulator Benchmark](../../figures/emulator_benchmark.png "Emulator Scalability Benchmark")
+
+
 
 ## Unit Tests
 
