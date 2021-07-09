@@ -6,14 +6,14 @@ import tensorflow
 import emulator.training
 
 
-train_data = numpy.array([
-    [0, 0],
-    [0, 1],
-    [1, 0],
-    [1, 1],
-])
+# train_data = numpy.array([
+#     [0, 0],
+#     [0, 1],
+#     [1, 0],
+#     [1, 1],
+# ])
 
-train_labels = numpy.array([0, 1, 0, 1])
+# train_labels = numpy.array([0, 1, 0, 1])
 
 
 class EmulatorTrainingTest(unittest.TestCase):
