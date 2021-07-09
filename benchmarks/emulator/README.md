@@ -8,15 +8,15 @@ To get the data, install `gdown`
 
 Download the training and test data
 
-    gdown https://drive.google.com/uc?id=14IDUDslmuWx2ZkP1nC0RUdue5EqGet1W
+    cd ~/
+    gdown https://drive.google.com/uc?id=1r1S48SC0NslVOdj89mzVrzcx7082u7Lh
 
 Your md5sum should be
 
-    4e8d110dec4fa3b84bc5efb743f1e802  datasets.zip
+    432f2ee3b3e978efab24e51b6f527dcf  micro_datasets.zip
 
 Unzip the data
 
-    unzip datasets.zip
     unzip micro_dataset.zip
 
 If you use CUDA, specify the correct path for the XLA, e.g.,
@@ -31,7 +31,7 @@ First, install all dependencies specify in the [requirements.txt](../../requirem
 
 To train the neural network-based emulator, run
 
-    time PYTHONPATH=./ python train.py &> trainlog.log
+    time PYTHONPATH=./ python train.py --datasets_path=~/micro_dataset/datasets/
 
 You can change parameters of the training
 by editing the `global_config.py` file.
@@ -57,7 +57,7 @@ First, install ray,
 
 Then, run
 
-    time PYTHONPATH=./ python scalability_benchmark.py -c 4 &> scalabilitylog.log 
+    time PYTHONPATH=./ python scalability_benchmark.py -c 4 --datasets_path=~/micro_dataset/datasets/
 
 Where we specified to use 4 CPUs (see `python scalability_benchmark.py -h` to see all the options).
 

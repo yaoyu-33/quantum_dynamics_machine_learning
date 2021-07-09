@@ -53,21 +53,16 @@ def train(model, config, dataset):
         step += 1
         if step % config.hyper_step_size == 0:
             logging.info(
-                """
-                    Step: {:6d},
-                    Loss: {:.8f},
-                    Time per log: {:.2f}s,
-                    Elapsed: {:},
-                    ETA: {:}
-                """
+                "Step: {:6d}, Loss: {:.8f}, Step Time: {:.2f}s, ETA: {:}"
                 .format(
                     step,
                     metrics["train_loss"].result(),
                     time.time() - logging_time,
-                    emulator.utils.get_readable_time(time.time() - start_time),
                     emulator.utils.get_readable_time(
                         (time.time() - start_time) /
-                        step * (config.num_train_steps - step))), flush=True)
+                        step*(config.num_train_steps - step))
+                )
+            )
             yield step, float(metrics["train_loss"].result())
 
             for k in metrics:

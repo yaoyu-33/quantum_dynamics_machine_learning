@@ -20,7 +20,7 @@ class Emulator(ray.tune.Trainable):
     def setup(self, config):
         """Setup."""
         conf = global_config.Config(
-            datasets_path=config['datasets_path'],
+            datasets_path=os.path.realpath(os.path.expanduser(args.datasets_path)),
             model_name="demo-gru",
             hidden_size=config['hidden'],
             dropout_rate=config['dropout'],
@@ -41,7 +41,7 @@ class Emulator(ray.tune.Trainable):
         score = emulator.evaluation.evaluate(
             self.model, self.conf, self.valid_dataset)
 
-        return {"mean_accuracy": score}
+        return {"mean_correlation": score}
 
     def save_checkpoint(self, checkpoint_dir):
         """Save the model's checkpoint."""
@@ -90,21 +90,20 @@ if __name__ == "__main__":
         Emulator,
         name="pbt_emulator_tuning",
         scheduler=scheduler,
-        metric="mean_accuracy",
+        metric="mean_correlation",
         mode="max",
         stop={
-            "training_iteration": 2  # TODO: In the final run increase this
+            "training_iteration": 10  # TODO: In the final run increase this
         },
-        num_samples=8,  # TODO: In the final run you might increase it
+        num_samples=32,  # TODO: In the final run you might increase it
         config={
-            'datasets_path': os.path.abspath(args.datasets_path),
+            'datasets_path': os.path.realpath(
+                os.path.expanduser(args.datasets_path)),
             'hidden': ray.tune.randint(32, 512),
             'dropout': ray.tune.uniform(0, 1),
             'lr': ray.tune.loguniform(1e-5, 1e-1),
             'momentum': ray.tune.uniform(0.5, 1),
         },
-        checkpoint_freq=2,
-        checkpoint_at_end=True,
         resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0},
     )
 

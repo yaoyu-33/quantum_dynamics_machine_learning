@@ -22,8 +22,8 @@ class Config:
         self.output_channels = 2
         self.window_size = 23
         self.dropout_rate = 0.
-        self.hidden_size = 690
-        self.num_train_steps = 90000  # up to 900_000
+        self.hidden_size = 69
+        self.num_train_steps = 30_000
 
         # Optimizer Settings
         self.learning_rate = 1e-3
@@ -37,7 +37,7 @@ class Config:
 
         # Misc
         self.seed = 711
-        self.hyper_step_size = 10000  # at least 10_000
+        self.hyper_step_size = 2_000
         self.save_ckpt_steps = 1000000
 
         self.update(kwargs)

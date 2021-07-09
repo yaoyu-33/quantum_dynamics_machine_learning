@@ -6,8 +6,8 @@ import logging
 import subprocess
 import tensorflow as tf
 import time
-from global_config import num_input_frames, window_size, temp_folder, save_folder
-from global_config import temp_ratio, spat_ratio, b_weight
+from config import num_input_frames, window_size, temp_folder, save_folder
+from config import temp_ratio, spat_ratio, b_weight
 
 
 def retrieve_data(input_file, pot_scalar=10.0):

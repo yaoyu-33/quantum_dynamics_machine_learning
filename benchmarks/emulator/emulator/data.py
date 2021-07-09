@@ -17,9 +17,10 @@ def get_training_dataset(config):
     """
     try:
         dataset = iter(_create_tensorflow_dataset(config))
-        return dataset
-    except Exception as e:
-        return e
+    except Exception:
+        raise Exception('Dataset path is incorrect!')
+
+    return dataset
 
 
 def get_validation_dataset(config):
