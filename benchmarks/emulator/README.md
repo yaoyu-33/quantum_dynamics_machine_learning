@@ -86,4 +86,4 @@ To check the coverage, install
 Then, run
 
     coverage run --source='.' -m unittest discover tests "*_test.py"
-    coverage report -m --omit=,"tests/*","global_config.py","train.py","scalability_benchmark.py","download_data.py"
+    coverage report -m --omit=,"tests/*","global_config.py","train.py","scalability_benchmark.py","*/__init__.py"
