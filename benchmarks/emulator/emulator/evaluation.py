@@ -28,7 +28,7 @@ def evaluate(model, config, validation_data):
     return score
 
 
-def get_result(model, config, data, frames=400, normalization=False):
+def get_result(model, config, data, frames=40, normalization=False):
     """Calculate resulting simulation from model.
 
     Args:
@@ -82,7 +82,7 @@ def get_result(model, config, data, frames=400, normalization=False):
     return result
 
 
-def get_avg_corr(config, data, result, frames=400):
+def get_avg_corr(config, data, result, frames=40):
     """Calculate Normalized Correlation.
 
     Args:

@@ -93,16 +93,16 @@ if __name__ == "__main__":
         metric="mean_correlation",
         mode="max",
         stop={
-            "training_iteration": 10  # TODO: In the final run increase this
+            "training_iteration": 1  # TODO: In the final run increase this
         },
-        num_samples=32,  # TODO: In the final run you might increase it
+        num_samples=16,  # TODO: In the final run you might increase it
         config={
             'datasets_path': os.path.realpath(
                 os.path.expanduser(args.datasets_path)),
-            'hidden': ray.tune.randint(32, 512),
-            'dropout': ray.tune.uniform(0, 1),
+            'hidden': ray.tune.randint(48, 96),
+            'dropout': ray.tune.uniform(0, 0.5),
             'lr': ray.tune.loguniform(1e-5, 1e-1),
-            'momentum': ray.tune.uniform(0.5, 1),
+            'momentum': ray.tune.uniform(0.6, 1),
         },
         resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0},
     )
