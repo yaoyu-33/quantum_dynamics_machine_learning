@@ -63,11 +63,27 @@ Where we specified to use 4 CPUs (see `python scalability_benchmark.py -h` to se
 
 ## Results
 
-We tested the scalability on the USC Discovery cluster running on 
+We tested the scalability on the USC Discovery cluster.
+We performed two experiments, one across the nodes (with the fixed number of cores per node),
+and second for one node (changing the number of available processors).
 
 ![Emulator Benchmark](../../figures/emulator_benchmark.png "Emulator Scalability Benchmark")
 
+The scalability across the nodes is close to ideal. The measured network
+traffic between two nodes was about 200 kB/s (for the central node the
+measured network traffic was 200*N kB/s where N is the number of nodes).
 
+The line showing the scalability for one node (blue) deviates from the ideal
+scaling more than the line for scalability across the nodes (black line).
+This might be an effect of the Intel Turbo Boost Technology being present. 
+When running our program on one node and scaling the number of available
+logical cores, the effective frequency of the involved cores depend on the
+total load of the processor. When only few logical cores are involved,
+their frequency is larger than the frequency of cores under more balanced load.
+This might explain the deviation of the blue line from the ideal scaling. 
+However, when measuring the scaling across the nodes, the frequency of each
+individual core is the same regardless how many cores are involved. Thus,
+we should observe smaller  deviation from the line of ideal scaling.
 
 ## Unit Tests
 

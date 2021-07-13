@@ -20,7 +20,7 @@ class Emulator(ray.tune.Trainable):
     def setup(self, config):
         """Setup."""
         conf = global_config.Config(
-            datasets_path=os.path.realpath(os.path.expanduser(args.datasets_path)),
+            datasets_path=config['datasets_path'],
             model_name="demo-gru",
             hidden_size=config['hidden'],
             dropout_rate=config['dropout'],
