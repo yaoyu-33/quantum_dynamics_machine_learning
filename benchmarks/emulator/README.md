@@ -27,7 +27,7 @@ If you use CUDA, specify the correct path for the XLA, e.g.,
 
 First, install all dependencies specify in the [requirements.txt](../../requirements.txt)
 
-    pip instll -r ../../requirements.txt
+    pip install -r ../../requirements.txt
 
 To train the neural network-based emulator, run
 
