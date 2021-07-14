@@ -38,15 +38,21 @@ by editing the `global_config.py` file.
 
 ## Slurm Job Description
 
-The slurm job description is in the `train.job` file.
+The single slurm job description is in the `train.job` file.
 
-To submit a slurm job, run
+To submit the slurm job, run
 
     sbatch train.job
     
 You can check if your job is in the queue by running
 
     squeue -u $USER
+
+To submit the scalability benchmark, you can use either `scalability_benchmark.job`
+or `scalability_benchmark_multi_nodes.job`.
+Note, that to run the experiment on multiple nodes, you should use `ray.init('auto')`
+instead of `ray.init(num_cpus=..., num_gpus=...)` in the [scalability_benchmark.py](./scalability_benchmark.py).
+See also [ray documentation](https://docs.ray.io/en/master/cluster/slurm.html).
 
 ## Scalability Benchmark
 
@@ -66,15 +72,16 @@ Where we specified to use 4 CPUs (see `python scalability_benchmark.py -h` to se
 We tested the scalability on the USC Discovery cluster.
 We performed two experiments, one across the nodes (with the fixed number of cores per node),
 and second for one node (changing the number of available processors).
+Additionally, we tested our code on google cloud platform.
 
-![Emulator Benchmark](../../figures/emulator_benchmark.png "Emulator Scalability Benchmark")
+![Emulator Benchmark](../../figures/emulator_benchmark_many_platforms.png "Emulator Scalability Benchmark")
 
 The scalability across the nodes is close to ideal. The measured network
 traffic between two nodes was about 200 kB/s (for the central node the
 measured network traffic was 200*N kB/s where N is the number of nodes).
 
 The line showing the scalability for one node (blue) deviates from the ideal
-scaling more than the line for scalability across the nodes (black line).
+scaling more than the line for scalability across the nodes (green line).
 This might be an effect of the Intel Turbo Boost Technology being present. 
 When running our program on one node and scaling the number of available
 logical cores, the effective frequency of the involved cores depend on the
@@ -82,8 +89,7 @@ total load of the processor. When only few logical cores are involved,
 their frequency is larger than the frequency of cores under more balanced load.
 This might explain the deviation of the blue line from the ideal scaling. 
 However, when measuring the scaling across the nodes, the frequency of each
-individual core is the same regardless how many cores are involved. Thus,
-we should observe smaller  deviation from the line of ideal scaling.
+individual core is the same regardless how many cores are involved.
 
 ## Unit Tests
 

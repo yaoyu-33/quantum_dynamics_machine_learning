@@ -74,10 +74,13 @@ if __name__ == "__main__":
     if not args.datasets_path:
         raise Exception('You must specify datasets path.')
 
+    # CAVEAT: If you want to use scalability_benchmark_multi_nodes.job
+    #         You must use `ray.init('auto')` instead of
+    #         ray.init(num_cpus=..., num_gpus=...)
     ray.init(
         num_cpus=args.cpu_number,
         num_gpus=args.gpu_number,
-        log_to_driver=True
+        log_to_driver=True  # Change to False to hide clients' logs
     )
 
     scheduler = ray.tune.schedulers.AsyncHyperBandScheduler(
