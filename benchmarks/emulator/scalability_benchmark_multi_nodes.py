@@ -61,27 +61,17 @@ if __name__ == "__main__":
     """Run."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '-c', '--cpu_number', type=int,
-        help='Number of CPUs.')
-    parser.add_argument(
         '-d', '--datasets_path', type=str,
         help='Path to the datasets directory')
-    parser.add_argument(
-        '-g', '--gpu_number', type=int, default=0,
-        help='Number of GPUs.')
     args = parser.parse_args()
 
     if not args.datasets_path:
         raise Exception('You must specify datasets path.')
 
-    # CAVEAT: If you want to use scalability_benchmark_multi_nodes.job
-    #         You must use `ray.init('auto')` instead of
-    #         ray.init(num_cpus=..., num_gpus=...)
-    ray.init(
-        num_cpus=args.cpu_number,
-        num_gpus=args.gpu_number,
-        log_to_driver=False  # Change to True to show clients' logs
-    )
+    # CAVEAT: If you want to use scalability_benchmark.job
+    #         You must use ray.init(num_cpus=..., num_gpus=...)
+    #         instead of `ray.init('auto')`
+    ray.init('auto', log_to_driver=False)
 
     scheduler = ray.tune.schedulers.AsyncHyperBandScheduler(
         time_attr="training_iteration",
@@ -107,7 +97,7 @@ if __name__ == "__main__":
             'lr': ray.tune.loguniform(1e-5, 1e-1),
             'momentum': ray.tune.uniform(0.6, 1),
         },
-        resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0},
+        resources_per_trial={'cpu': 1, 'gpu': 0},
     )
 
     print("Best hyperparameters found were: ", results.best_config)
