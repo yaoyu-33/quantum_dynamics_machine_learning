@@ -24,11 +24,11 @@ def evaluate(model, config, validation_data):
         result = get_result(model, config, data)
         avg_correlations.append(get_avg_corr(config, data, result))
 
-    score = np.average(avg_correlations)
+    score = np.average(np.average(avg_correlations))
     return score
 
 
-def get_result(model, config, data, frames=40, normalization=False):
+def get_result(model, config, data, frames=400, normalization=False):
     """Calculate resulting simulation from model.
 
     Args:
@@ -82,7 +82,7 @@ def get_result(model, config, data, frames=40, normalization=False):
     return result
 
 
-def get_avg_corr(config, data, result, frames=40):
+def get_avg_corr(config, data, result, frames=400):
     """Calculate Normalized Correlation.
 
     Args:
@@ -101,5 +101,6 @@ def get_avg_corr(config, data, result, frames=40):
         np.correlate(target[i], result[i]) /
         (np.linalg.norm(target[i]) * np.linalg.norm(result[i]))
         ) for i in range(len(target))]
-    avg_corr = np.average(np.array(corr))
-    return avg_corr
+    # avg_corr = np.average(np.array(corr))
+    # return avg_corr
+    return np.array(corr)

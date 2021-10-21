@@ -23,7 +23,7 @@ class Config:
         self.window_size = 23
         self.dropout_rate = 0.
         self.hidden_size = 69
-        self.num_train_steps = 15_000
+        self.num_train_steps = 900_000
 
         # Optimizer Settings
         self.learning_rate = 1e-3
@@ -37,7 +37,7 @@ class Config:
 
         # Misc
         self.seed = 711
-        self.hyper_step_size = 1000
+        self.hyper_step_size = 9000 #changed 1000 to 5000 to 90000
         self.save_ckpt_steps = 1000000
 
         self.update(kwargs)

@@ -23,9 +23,10 @@ class Emulator(ray.tune.Trainable):
             datasets_path=config['datasets_path'],
             model_name="demo-gru",
             hidden_size=config['hidden'],
-            dropout_rate=config['dropout'],
-            learning_rate=config['lr'],
-            opt_beta_1=config['momentum'],
+            # dropout_rate=config['dropout'],
+            # learning_rate=config['lr'],
+            # opt_beta_1=config['momentum'],
+            # weight_decay_rate=config['weight_decay_rate']
         )
 
         self.train_dataset = emulator.data.get_training_dataset(conf)
@@ -96,16 +97,17 @@ if __name__ == "__main__":
         metric="mean_correlation",
         mode="max",
         stop={
-            "training_iteration": 1  # TODO: In the final run increase this
+            "training_iteration": 10  # TODO: In the final run increase this
         },
-        num_samples=16,  # TODO: In the final run you might increase it
+        num_samples=4,  # TODO: In the final run you might increase it
         config={
             'datasets_path': os.path.realpath(
                 os.path.expanduser(args.datasets_path)),
-            'hidden': ray.tune.randint(48, 96),
-            'dropout': ray.tune.uniform(0, 0.5),
-            'lr': ray.tune.loguniform(1e-5, 1e-1),
-            'momentum': ray.tune.uniform(0.6, 1),
+            'hidden': ray.tune.randint(60, 70),
+            # 'dropout': ray.tune.uniform(0, 0.5),
+            # 'lr': ray.tune.loguniform(1e-5, 1e-1), 
+            # 'momentum': ray.tune.uniform(0.6, 1),
+            # 'weight_decay_rate': ray.tune.uniform(0.01,0.05)
         },
         resources_per_trial={'cpu': 1, 'gpu': 1 if args.gpu_number else 0},
     )
