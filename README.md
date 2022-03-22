@@ -1,8 +1,8 @@
 # Emulating Quantum Dynamics with Neural Networks via Knowledge Distillation
 
 This repository contains the source code for the paper
-Yu Yao, Chao Cao, Stephan Haas, and Marcin Abram, 
-_Emulating Quantum Dynamics with Neural Networks via Knowledge Distillation_ (2021).
+Yu Yao, Chao Cao, Stephan Haas, Mahak Agarwal, Divyam Khanna, and Marcin,
+[Emulating Quantum Dynamics with Neural Networks via Knowledge Distillation](https://arxiv.org/abs/2203.10200), arXiv 2203.10200 (2022).
 
 The purpose of this code is to illustrate our framework and to replicate the main results of our paper.
 
@@ -89,5 +89,11 @@ It can be used to model quantum devices and to simulate quantum information prop
 
 ## Citation
 
-TBA
-
+```
+@misc{2203.10200,
+  Author = {Yu Yao and Chao Cao and Stephan Haas and Mahak Agarwal and Divyam Khanna and Marcin Abram},
+  Title = {Emulating Quantum Dynamics with Neural Networks via Knowledge Distillation},
+  Year = {2022},
+  Eprint = {arXiv:2203.10200},
+}
+```
